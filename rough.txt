@@ -1,5 +1,0 @@
-things to show --> 
-
-1) Search box ( to search movies which we have to recommend)
-2) show movie data, (poster, release date, genres,(tagline if any))
-3) show recommended movies(their posters, their title)
