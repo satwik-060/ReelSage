@@ -92,36 +92,41 @@ with curr_movie_grid[1]:
 #director data       
 with curr_movie_grid[2]:
     directors = df[df['id'] == movie_id]['crew']
-    director_data = get_person_data(ast.literal_eval(directors.iloc[0])[0]['id'])
-    st.markdown('#### *Director*'.format(option))
-    if('profile_path' in director_data.keys() and director_data['profile_path'] != None):
-        director_image = "https://image.tmdb.org/t/p/w500/" + director_data['profile_path']
-        st.image(director_image)
-    else:
+
+    if len(ast.literal_eval(directors.iloc[0])) == 0:
         director_image = 'static/Image Not Found - Imgur.png'
         st.image(director_image)
-    st.text(director_data['name'])
+    else :
+        director_data = get_person_data(ast.literal_eval(directors.iloc[0])[0]['id'])
+        st.markdown('#### *Director*'.format(option))
+        if('profile_path' in director_data.keys() and director_data['profile_path'] != None):
+            director_image = "https://image.tmdb.org/t/p/w500/" + director_data['profile_path']
+            st.image(director_image)
+        else:
+            director_image = 'static/Image Not Found - Imgur.png'
+            st.image(director_image)
+        st.text(director_data['name'])
     
 
 #current movie cast data
-st.markdown("### Top Cast of {}".format(option))
 cast_data = ast.literal_eval(df[df['id'] == movie_id].iloc[0]['cast'])
 cast_count = len(cast_data)
 
-cast_grid = st.columns(min(10, cast_count))
-
-for i in range(min(10, cast_count)):
-    with cast_grid[i]:
-        cast_id = cast_data[i]['char_id']
-        cast_data_req = get_person_data(cast_id)
-        st.text(cast_data[i]['name'])
-        if('profile_path' in cast_data_req.keys() and cast_data_req['profile_path'] != None):
-            cast_image = "https://image.tmdb.org/t/p/w500/" + cast_data_req['profile_path']
-            st.image(cast_image)
-        else:
-            cast_image = 'static/Image Not Found - Imgur.png'
-            st.image(cast_image)
-        st.text(cast_data[i]['character'])
+if cast_count > 0:
+    cast_grid = st.columns(min(10, cast_count))
+    st.markdown("### Top Cast of {}".format(option))
+    for i in range(min(10, cast_count)):
+        with cast_grid[i]:
+            cast_id = cast_data[i]['char_id']
+            cast_data_req = get_person_data(cast_id)
+            st.text(cast_data[i]['name'])
+            if('profile_path' in cast_data_req.keys() and cast_data_req['profile_path'] != None):
+                cast_image = "https://image.tmdb.org/t/p/w500/" + cast_data_req['profile_path']
+                st.image(cast_image)
+            else:
+                cast_image = 'static/Image Not Found - Imgur.png'
+                st.image(cast_image)
+            st.text(cast_data[i]['character'])
     
 # Recommendations
 st.write('----')
